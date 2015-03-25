@@ -4,10 +4,12 @@ using System.Collections;
 public class Player : Character {
     #region Private methods
     void FixedUpdate () {
-        if (Input.GetButton ("Left")) {
+        float h = Input.GetAxis ("Horizontal");
+
+        if (h < 0) {
             inputX = -1;
         }
-        else if (Input.GetButton ("Right")) {
+        else if (h > 0) {
             inputX = 1;
         }
         else {

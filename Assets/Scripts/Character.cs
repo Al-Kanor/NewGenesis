@@ -11,15 +11,18 @@ public class Character : MonoBehaviour {
     public bool initialLeft = true;
     public LayerMask groundMask;
     public GameObject bulletPrefab;
+    public Material material;
     #endregion
 
     #region Private attributes
+    protected int lifeMax;
     protected float inputX;
     protected bool isGrounded;
     protected float speedY = 0;
     protected Vector3 direction;
     protected bool canShoot = true;
     protected float shootTimer;
+    protected Material currentMaterial;
     #endregion
 
     #region Public methods
@@ -28,6 +31,7 @@ public class Character : MonoBehaviour {
         if (0 == life) {
             Destroy (gameObject);
         }
+        material.color = Color.Lerp (Color.black, Color.white, (float)life / (float)lifeMax);
     }
     #endregion
 
@@ -79,6 +83,8 @@ public class Character : MonoBehaviour {
 
     protected virtual void Start () {
         direction = initialLeft ? Vector3.left : Vector3.right;
+        lifeMax = life;
+        material.color = Color.white;
     }
     
     IEnumerator UpdateShootDelay () {
