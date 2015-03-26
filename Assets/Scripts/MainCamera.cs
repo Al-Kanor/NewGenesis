@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MainCamera : MonoBehaviour {
     #region Public enum
-    public enum Mode {
+    public enum CameraMode {
         ACTION,
         CHARACTER_CENTERED,
         ORTHOGRAPHIC,
@@ -36,16 +36,16 @@ public class MainCamera : MonoBehaviour {
     #endregion
 
     #region Private attributes
-    private Mode mode;
+    private CameraMode mode;
     private Camera camera;
     #endregion
 
     #region Getters / Setters
-    public Mode NewMode {
+    public CameraMode Mode {
         get { return mode; }
         set {
-            if (Mode.ORTHOGRAPHIC == mode && Mode.ORTHOGRAPHIC != value || Mode.ORTHOGRAPHIC != mode && Mode.ORTHOGRAPHIC == value) {
-                // Perspective ot orthographic or orthographic to perspective
+            if (CameraMode.ORTHOGRAPHIC == mode && CameraMode.ORTHOGRAPHIC != value || CameraMode.ORTHOGRAPHIC != mode && CameraMode.ORTHOGRAPHIC == value) {
+                // Perspective to orthographic or orthographic to perspective
                 camera.orthographic = !camera.orthographic;
             }
             mode = value;
@@ -54,16 +54,21 @@ public class MainCamera : MonoBehaviour {
     #endregion
 
     #region Private methods
+    void Awake () {
+        camera = GetComponent<Camera> ();
+        mode = CameraMode.SOFT;
+    }
+
     void FixedUpdate () {
         Vector3 dest;
 
         switch (mode) {
-            case Mode.ACTION:
+            case CameraMode.ACTION:
                 dest = new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - actionModeDistance);
                 transform.position = Vector3.Lerp (transform.position, dest, actionModeSpeed * Time.fixedDeltaTime);
                 transform.LookAt (target);
                 break;
-            case Mode.ORTHOGRAPHIC:
+            case CameraMode.ORTHOGRAPHIC:
                 dest = new Vector3 (target.transform.position.x, transform.position.y, target.transform.position.z - 1);
                 float targetScreenheight = camera.WorldToScreenPoint (target.transform.position).y;
                 if (Mathf.Abs (targetScreenheight) > camera.pixelHeight / 2 + orthographicModeFreeZoneRadius || Mathf.Abs (targetScreenheight) < camera.pixelHeight / 2 - orthographicModeFreeZoneRadius) {
@@ -72,7 +77,7 @@ public class MainCamera : MonoBehaviour {
                 transform.position = Vector3.Lerp (transform.position, dest, orthographicModeSpeed * Time.fixedDeltaTime);
                 camera.orthographicSize = orthographicModeSize;
                 break;
-            case Mode.SOFT:
+            case CameraMode.SOFT:
                 dest = new Vector3 (target.transform.position.x, transform.position.y, target.transform.position.z - softModeDistance);
                 targetScreenheight = camera.WorldToScreenPoint (target.transform.position).y;
                 if (Mathf.Abs (targetScreenheight) > camera.pixelHeight / 2 + softModeFreeZoneRadius || Mathf.Abs (targetScreenheight) < camera.pixelHeight / 2 - softModeFreeZoneRadius) {
@@ -81,11 +86,6 @@ public class MainCamera : MonoBehaviour {
                 transform.position = Vector3.Lerp (transform.position, dest, softModeSpeed * Time.fixedDeltaTime);
                 break;
         }
-    }
-
-    void Start() {
-        camera = GetComponent<Camera> ();
-        mode = Mode.SOFT;
     }
     #endregion
 }
