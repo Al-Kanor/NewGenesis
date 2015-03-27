@@ -14,7 +14,7 @@ public class Heart : BodyPart {
     public void TakeDamage (int damage) {
         life = Mathf.Clamp (life - damage, 0, life);
         if (0 == life) {
-            Destroy (owner.gameObject);
+            owner.Die ();
         }
     }
     #endregion

@@ -19,6 +19,10 @@ public class Bullet : MonoBehaviour {
     #endregion
 
     #region Private methods
+    void Awake () {
+        Destroy (gameObject, 3);
+    }
+
     void FixedUpdate () {
         transform.Translate (direction * speed * Time.fixedDeltaTime);
     }

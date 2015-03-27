@@ -11,6 +11,13 @@ public class Enemy : Character {
     public float checkWallScope = 10f;
     #endregion
 
+    #region Public methods
+    public override void Die () {
+        LevelManager.Instance.EndLevel ();
+        base.Die ();
+    }
+    #endregion
+
     #region Private methods
     void FixedUpdate () {
         // Hole detection

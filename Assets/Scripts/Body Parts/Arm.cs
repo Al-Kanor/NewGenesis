@@ -12,10 +12,20 @@ public class Arm : BodyPart {
     #endregion
 
     #region Public methods
-    public virtual void Shoot () {
+    protected virtual void Shoot () {/*
         canShoot = false;
         shootTimer = shootDelay;
-        StartCoroutine ("UpdateShootDelay");
+        StartCoroutine ("UpdateShootDelay");*/
     }
+    /*
+    IEnumerator UpdateShootDelay () {
+        do {
+            shootTimer -= Time.fixedDeltaTime;
+            if (shootTimer <= 0) {
+                canShoot = true;
+            }
+            yield return new WaitForFixedUpdate ();
+        } while (!canShoot);
+    }*/
     #endregion
 }

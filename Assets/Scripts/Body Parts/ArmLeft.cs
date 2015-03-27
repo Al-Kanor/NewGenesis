@@ -3,34 +3,45 @@ using System.Collections;
 
 public class ArmLeft : Arm {
     #region Public attributes
+    public float recoilStrength;
     public GameObject bulletPrefab;
     #endregion
 
+    private float lastShoot;
+
     #region Public methods
-    public void Shoot () {
-        if (canShoot) {
-            GameObject bulletObject = Instantiate (bulletPrefab, transform.position, Quaternion.identity) as GameObject;
-            bulletObject.GetComponent<Bullet> ().Direction = owner.Direction;
-            string layerName = "Ally" == owner.tag ? "Ally Bullet" : "Enemy Bullet";
-            bulletObject.layer = LayerMask.NameToLayer (layerName);
-            base.Shoot ();
-        }
-    }
     #endregion
 
     #region Private methods
-    void Start () {
-        
+    protected override void Shoot () {
+
+        //if (canShoot) {
+        GameObject bulletObject = Instantiate (bulletPrefab, transform.position, Quaternion.identity) as GameObject;
+        bulletObject.GetComponent<Bullet> ().Direction = owner.Direction;
+        string layerName = "Ally" == owner.tag ? "Ally Bullet" : "Enemy Bullet";
+        bulletObject.layer = LayerMask.NameToLayer (layerName);
+
+        // Recoil
+        //owner.transform.Translate (-owner.Direction * recoilStrength);
+
+        base.Shoot ();
+        //}*/
+
     }
 
-    IEnumerator UpdateShootDelay () {
+    void Start () {
+        shootTimer = shootDelay;
+    }
+
+    IEnumerator UpdateShoot () {
         do {
-            shootTimer -= Time.fixedDeltaTime;
-            if (shootTimer <= 0) {
-                canShoot = true;
+            if (Time.time - lastShoot >= shootDelay) {
+                Shoot ();
+                lastShoot = Time.time;
             }
-            yield return new WaitForFixedUpdate ();
-        } while (!canShoot);
+            yield return new WaitForSeconds (shootDelay);
+            canShoot = true;
+        } while (true);
     }
     #endregion
 }

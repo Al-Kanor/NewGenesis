@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 public class MainCamera : MonoBehaviour {
     #region Public enum
     public enum CameraMode {
         ACTION,
-        CHARACTER_CENTERED,
         ORTHOGRAPHIC,
         SOFT
     }
@@ -17,10 +17,6 @@ public class MainCamera : MonoBehaviour {
     // Action mode
     public float actionModeSpeed = 5; // Speed at which the camera follows the target
     public float actionModeDistance = 9;  // Distance from the target
-
-    // Character centered mode
-    public float centeredModeSpeed = 5; // Speed at which the camera follows the target
-    public float centeredModeDistance = 9;  // Distance from the target
 
     // Orthographic mode
     public float orthographicModeSpeed = 5; // Speed at which the camera follows the target
@@ -48,6 +44,8 @@ public class MainCamera : MonoBehaviour {
                 // Perspective to orthographic or orthographic to perspective
                 camera.orthographic = !camera.orthographic;
             }
+
+            //GetComponent <CameraMotionBlur> ().enabled = CameraMode.ACTION == value;
             mode = value;
         }
     }

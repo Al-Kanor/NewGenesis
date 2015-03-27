@@ -38,6 +38,10 @@ public class Character : MonoBehaviour {
     #endregion
 
     #region Public methods
+    public virtual void Die () {
+        Destroy (gameObject);
+    }
+
     public void TakeDamage (int damage) {
         heart.TakeDamage (damage);
     }
@@ -82,11 +86,11 @@ public class Character : MonoBehaviour {
     }
 
     protected void ShootLeft () {
-        armLeft.Shoot ();
+        armLeft.StartCoroutine ("UpdateShoot");
     }
 
     protected void ShootRight () {
-        armRight.Shoot ();
+        //armRight.StartCoroutine ("UpdateShoot");
     }
 
     protected virtual void Start () {
@@ -180,6 +184,11 @@ public class Character : MonoBehaviour {
         //torsoObject.transform.parent = transform;
         torso = torsoObject.GetComponent<Torso> ();
         torso.Owner = this;
+    }
+
+    protected void StopShootLeft () {
+        armLeft.StopCoroutine ("UpdateShoot");
+        
     }
     #endregion
 }
